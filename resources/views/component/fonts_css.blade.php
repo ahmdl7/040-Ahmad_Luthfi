@@ -15,3 +15,9 @@
       href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap"
       rel="stylesheet"
     />
+    <style>
+      .card img:hover {
+      transform: scale(1.2) !important; 
+      transition: transform 0.3s ease-in-out !important;
+    }
+    </style>

@@ -76,4 +76,10 @@ Route::get('/index', function () {
     return view('index', ['products' => $products], ['gambar' => $gambar]);
 });
 
+Route::get('/login', function () {
+    return view('login');
+});
 
+Route::get('/detail', function () {
+    return view('detail');
+});

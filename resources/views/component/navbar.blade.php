@@ -6,6 +6,7 @@
           <div class="navbar-nav">
             <a class="nav-link" href="#">Home</a>
             <a class="nav-link" href="#">Collection</a>
+            <a class="nav-link" href="/login">Admin</a>
           </div>
         </div>
       </div>

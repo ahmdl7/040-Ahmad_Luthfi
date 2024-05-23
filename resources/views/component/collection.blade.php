@@ -1,13 +1,14 @@
 <section
-      class="collection d-flex flex-wrap justify-content-evenly my-3 mx-3 text-center"
+      class="container mx-0 collection row gy-5 justify-content-between text-center"
     >
     @foreach ($products as $product)
-      <div class="card" style="width: 18rem">
+      <div class="card col-4" style="width: 15rem">
+        <a href="/detail">
         <img
           src="{{ asset($product['image']) }}"
           class="card-img-top"
           alt="{{ $product['ket'] }}"
-        />
+        /></a>
         <div class="card-body">
           <p>
             {{ $product['name'] }} <br />
