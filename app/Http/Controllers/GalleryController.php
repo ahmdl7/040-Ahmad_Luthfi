@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 class GalleryController extends Controller
 {
     public function index(){
+        //select semua data gallery
         $gallery = Gallery::all();
         return view('admin-gallery', ['gallery' => $gallery]);
     }
@@ -18,16 +19,18 @@ class GalleryController extends Controller
     }
 
     public function store(Request $request){
+        //validasi data
         $data = $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048'
         ]);
-
+        //menyimpan gambar pada folder lokal
         if ($request->hasFile('image')) {
             $fileName = time().'.'.$request->image->extension();  
             $request->image->move(public_path('images/gallery'), $fileName);
             $data['image'] = $fileName;
         }
 
+        //menyimpan data
         Gallery::create($data);
 
         return redirect(route('gallery.index'))->with('success', 'Image Added Successfully');
@@ -39,12 +42,13 @@ class GalleryController extends Controller
 
     public function update(Request $request, Gallery $gallery)
     {
+        //validasi data
         $data = $request->validate([
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
         if ($request->hasFile('image')) {
-            // Hapus gambar lama dari file sistem
+            // Hapus gambar lama dari file lokal
             $imagePath = public_path('images/gallery/' . $gallery->image);
             if (file_exists($imagePath)) {
                 unlink($imagePath);

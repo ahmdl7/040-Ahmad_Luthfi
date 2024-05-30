@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 class CollectionController extends Controller
 {
     public function index(){
+        //select semua data collection
         $collection = Collection::all();
         return view('admin-collection', ['collection' => $collection]);
     }
@@ -17,6 +18,7 @@ class CollectionController extends Controller
     }
 
     public function store(Request $request){
+        //validasi data
         $data = $request->validate([
             'nama' => 'required',
             'kode' => 'required',
@@ -26,12 +28,14 @@ class CollectionController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
+        //menyimpan file gambar pada folder lokal
         if ($request->hasFile('image')) {
             $fileName = time().'.'.$request->image->extension();  
             $request->image->move(public_path('images/collections'), $fileName);
             $data['image'] = $fileName;
         }
 
+        //menyimpan data
         Collection::create($data);
 
         return redirect(route('collection.index'))->with('success', 'Data Added Successfully');
@@ -43,6 +47,7 @@ class CollectionController extends Controller
 
     public function update(Request $request, Collection $collection)
     {
+        //validasi data
         $data = $request->validate([
             'nama' => 'required',
             'kode' => 'required',
@@ -51,21 +56,21 @@ class CollectionController extends Controller
             'deskripsi'=> 'nullable|string',
             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
-        if ($request->hasFile('image')) {
             
+        if ($request->hasFile('image')) {
+            //menghapus gambar lama
             $imagePath = public_path('images/collections/' . $collection->image);
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
 
-                
+            //menyimpan gambar baru
             $fileName = time().'.'.$request->image->extension();  
             $request->image->move(public_path('images/collections/'), $fileName);
             $data['image'] = $fileName;
         }
 
-        
+        //mengupdate data
         $collection->update($data);
 
         return redirect(route('collection.index'))->with('success', 'Data Updated Successfully');
@@ -73,13 +78,13 @@ class CollectionController extends Controller
 
     public function delete(Collection $collection)
     {
-      
+        //menghapus gambar dari folder lokal
         $imagePath = public_path('images/collections/' . $collection->image);
         if (file_exists($imagePath)) {
             unlink($imagePath);
         }
 
-        
+        //menhapus data
         $collection->delete();
 
         return redirect(route('collection.index'))->with('success', 'Data Deleted Successfully');
@@ -87,11 +92,13 @@ class CollectionController extends Controller
 
     public function getCollection()
     {
+        //mengambil semua data dari database
         $collection = Collection::all();
         return $collection;
     }
 
     public function detail($id){
+        //me-select gambar berdasarkan id
         $collection = Collection::where('id', $id)->first();
         return view('detail', ['collection' => $collection]);
     }

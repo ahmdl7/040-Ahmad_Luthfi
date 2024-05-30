@@ -16,9 +16,9 @@ class Logout
      */
     public function handle(Request $request, Closure $next): Response
     {
-        // Periksa apakah pengguna sudah login
+        // periksa apakah admin sudah login
         if (Auth::check()) {
-            // Logout pengguna
+            // logout admin
             Auth::logout();
 
             // Redirect ke halaman login

@@ -16,6 +16,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+        //memeriksa login
         if (!Auth::check()) {
             return redirect('/login')->with('error', 'Harus Login Terlebih Dahulu!');
         }

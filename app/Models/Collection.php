@@ -9,6 +9,7 @@ class Collection extends Model
 {
     use HasFactory;
 
+    //mendefinisikan kolom yang ingin diinput data
     protected $fillable = [
         'nama',
         'kode',
