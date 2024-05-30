@@ -1,0 +1,22 @@
+.tombol:hover {
+    background-color: #ee4d2d !important;
+    border-color: #ee4d2d !important;
+}
+
+.t-link:hover {
+    color: white !important;
+}
+
+@media screen and (max-width: 992px) {
+    .konten {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+    .produk {
+        width: 85% !important;
+    }
+    .produk1 {
+        width: 70% !important;
+    }
+}

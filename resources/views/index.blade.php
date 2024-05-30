@@ -13,6 +13,10 @@
 
     @include("component/collection")
 
+    @include("component/contact")
+
+    @include("component/footer")
+
     @include("component/script")
   </body>
 </html>

@@ -1,85 +1,45 @@
 <?php
 
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CollectionController;
+use App\Http\Controllers\GalleryController;
+use App\Http\Middleware\AdminMiddleware;
+use App\Http\Middleware\Logout;
+use App\Models\Collection;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/index', function () {
-
-    $gambar = ['img/galery/1.webp', 
-                'img/galery/2.webp', 
-                'img/galery/3.webp', 
-                'img/galery/4.webp', 
-                'img/galery/5.webp'];    
+Route::get('/index', function (GalleryController $galleryController, CollectionController $collectionController) {
     
-
-    $products = [
-        [
-            'image' => '/img/glasses/CARRERA_CARBON_Sunglasses_AVIATOR_SCA8034010KU61_1200000005649-s.jpg',
-            'ket' => 'gambar 1',
-            'name' => 'CARRERA',
-            'code' => 'SCA-8034-010-KU61',
-            'price' => 1500000    
-        ],
-        [
-            'image' => '/img/glasses/ERMENEGILDO_ZEGNA_METAL_Frame_RECTANGLE_FEZ5165D03856_1100000020812-s.jpg',
-            'ket' => 'gambar 2',
-            'name' => 'ERMENEGILDO',
-            'code' => 'FEZ-5165-D03856',
-            'price' => 2000000
-        ],
-        [
-            'image' => '/img/glasses/HANG_TEN_METAL_Frame_AVIATOR_FHT10545C152_1100000026311-s.jpg',
-            'ket' => 'gambar 3',
-            'name' => 'HANG TEN',
-            'code' => 'FHT-10545-C152',
-            'price' => 1350000
-        ],
-        [
-            'image' => '/img/glasses/HUGO_PLASTIC_Frame_AVIATOR_FHU1093OIT55_1100000026788-s.jpg',
-            'ket' => 'gambar 4',
-            'name' => 'HUGO',
-            'code' => 'FHU-1093O-IT55',
-            'price' => 1000000
-        ],
-        [
-            'image' => '/img/glasses/LACOSTE_METAL_Sunglasses_AVIATOR_SLAL236SA00160_1200000023435-s.png',
-            'ket' => 'gambar 5',
-            'name' => 'LACOSTE',
-            'code' => 'SLAL-236S-A00160',
-            'price' => 1200000
-        ],
-        [
-            'image' => '/img/glasses/NIKE_PLASTIC_Sunglasses_GEOMETRIC_SNKDJ304410076_1200000026813-s.png',
-            'ket' => 'gambar 6',
-            'name' => 'NIKE',
-            'code' => 'SNK-DJ304-410076',
-            'price' => 3500000
-        ],
-        [
-            'image' => '/img/glasses/PUMA_PLASTIC_Sunglasses_SQUARE_SPPE0048SA00458_1200000017044-s.jpg',
-            'ket' => 'gambar 7',
-            'name' => 'PUMA',
-            'code' => 'SPPE-0048-SA00458',
-            'price' => 3500000
-        ],
-        [
-            'image' => '/img/glasses/TED_BAKER_METAL_Frame_RECTANGLE_FTB4327166351_1100000052017-s.png',
-            'ket' => 'gambar 8',
-            'name' => 'TED BAKER',
-            'code' => 'FTB-43271-66351',
-            'price' => 1900000
-        ]    
-    ];
-    return view('index', ['products' => $products], ['gambar' => $gambar]);
+    $galleries = $galleryController->getGallery();
+    $collection = $collectionController->getCollection();
+      
+    return view('index', ['galleries' => $galleries, 'collection' => $collection]);
 });
 
 Route::get('/login', function () {
     return view('login');
 });
 
-Route::get('/detail', function () {
-    return view('detail');
-});
+Route::get('/logout', [AdminController::class, 'logout'])->name('logout')->middleware([Logout::class]);
+
+Route::post('/login', [AdminController::class, 'login'])->name('login.post');
+
+Route::get('/index/{collection}/edit', [CollectionController::class, 'detail'])->name('detail');
+
+
+Route::get('/admin-gallery', [GalleryController::class, 'index'])->name('gallery.index')->middleware([AdminMiddleware::class]);
+Route::get('/create-gallery', [GalleryController::class, 'create'])->middleware([AdminMiddleware::class]);
+Route::post('/create-gallery', [GalleryController::class, 'store'])->name('gallery.store')->middleware([AdminMiddleware::class]);
+Route::get('/admin-gallery/{gallery}/edit', [GalleryController::class, 'edit'])->name('gallery.edit')->middleware([AdminMiddleware::class]);
+Route::post('/admin-gallery/{gallery}/update', [GalleryController::class, 'update'])->name('gallery.update')->middleware([AdminMiddleware::class]);
+Route::delete('/admin-gallery/{gallery}', [GalleryController::class, 'delete'])->name('gallery.delete')->middleware([AdminMiddleware::class]);
+Route::get('/admin-collection', [CollectionController::class, 'index'])->name('collection.index')->middleware([AdminMiddleware::class]);
+Route::get('/create-collection',[CollectionController::class, 'create'])->middleware([AdminMiddleware::class]);
+Route::post('/create-collection', [CollectionController::class, 'store'])->name('collection.store')->middleware([AdminMiddleware::class]);
+Route::get('/admin-collection/{collection}/edit', [CollectionController::class, 'edit'])->name('collection.edit')->middleware([AdminMiddleware::class]);
+Route::post('/admin-collection/{collection}/update', [CollectionController::class, 'update'])->name('collection.update')->middleware([AdminMiddleware::class]);
+Route::delete('/admin-collection/{collection}', [CollectionController::class, 'delete'])->name('collection.delete')->middleware([AdminMiddleware::class]);
