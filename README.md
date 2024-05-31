@@ -3,7 +3,11 @@
 -   Project : Optik Fitri
 -   Deskripsi : Aplikasi Katalog kacamata secara online
 
-sebelum menjalankan aplikasi ketikan sintaks ini di terminal :
+langkah- langkah sebelum menjalankan aplikasi :
+
+-   buat database mysql bernama "optikf"
+
+lalu ketikan sintaks ini di terminal :
 
 -   php artisan migrate
 -   php artisan db:seed
